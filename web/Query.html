@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="Zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="ASokYLsRc7WFiTuJQPwKga3FPj7onwZo2cORMMLU">
+    <title>PepBCL</title>
+    <meta name="keywords" content="RNA, prediction, classification, bioinformatic">
+
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Open+Sans|Raleway" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body id="top" data-spy="scroll">
+
+
+<!-- Copyright � 2008. Spidersoft Ltd -->
+<style>
+    A.applink:hover {
+        border: 2px dotted #DCE6F4;
+        padding: 2px;
+        background-color: #ffff00;
+        color: green;
+        text-decoration: none
+    }
+
+    A.applink {
+        border: 2px dotted #DCE6F4;
+        padding: 2px;
+        color: #2F5BFF;
+        background: transparent;
+        text-decoration: none
+    }
+
+    A.info {
+        color: #2F5BFF;
+        background: transparent;
+        text-decoration: none
+    }
+
+    A.info:hover {
+        color: green;
+        background: transparent;
+        text-decoration: underline
+    }
+</style>
+
+
+<header id="home">
+    <!--main-nav-->
+    <div id="main-nav">
+
+        <nav class="navbar">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">PepBCL</a>
+                </div>
+                <div class="navbar-collapse collapse" id="ftheme">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="fa fa-home" href="home.html">Home</a></li>
+                        <li><a href="Server.html">Server</a></li>
+                        <li><a href="Download.html">Download</a></li>
+                        <li><a class="fa fa-users" href="Contact.html">Contact</a></li>
+                        <li><a href="Query.html">Query</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">PepBCL</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="fa fa-home" href="home.html">Home</a></li>
+                    <li><a href="Server.html">Server</a></li>
+                    <li><a href="Download.html">Download</a></li>
+                    <li><a class="fa fa-users" href="Contact.html">Contact</a></li>
+                    <li><a href="Query.html">Query</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+</header>
+
+<div class="wrapper">
+
+    <div class="section section-contact-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    <h3>Send Us A Message</h3>
+                    <p>Feel free to concact us by the contact form.
+                        <br>We appreciate your comments to make our website more complete in the future.
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-primary">
+
+                <form class="frm-submit" method="POST" action="/PepBCL/SendMail" role="form" novalidate="novalidate">
+                    <fieldset>
+                        <!-- <input type="hidden" name="_token" value="ASokYLsRc7WFiTuJQPwKga3FPj7onwZo2cORMMLU"> -->
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="fa fa-user-circle"></i>
+                        </span>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Input your name">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="fa fa-envelope"></i>
+                        </span>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="Input your email">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="message" id="message"
+                                      placeholder="Here can be your nice message" rows="10"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-round"><i class="fa fa-envelope">Ask Us</i>
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/jquery.tabletoCSV.js"></script>
+    <div class="container">
+        <footer class="footer">
+            <br>
+            <hr>
+            <p>
+            <p class="copyright">
+            <a href="http://www.sdu.edu.cn//">Shandong University</a> &copy; 2021.<br/> If you have
+                any comments, corrections or questions
+                <a href="Contact.html" target="_top">contact us</a>.</p></span>
+            </p>
+        </footer>
+    </div>
+</div>
+</body>
+
+</html>

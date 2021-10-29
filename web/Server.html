@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="ASokYLsRc7WFiTuJQPwKga3FPj7onwZo2cORMMLU">
+    <title>PepBCL</title>
+    <meta name="description" content="A web server for identifying m7G sites.">
+    <meta name="keywords" content="RNA, prediction, classification, bioinformatic">
+
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Open+Sans|Raleway" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Scripts -->
+    <script>
+        window.Laravel = {"csrfToken": "ASokYLsRc7WFiTuJQPwKga3FPj7onwZo2cORMMLU"};
+    </script>
+    <style>
+        pre > b {
+            color: #337ab7;
+        }
+
+        .error {
+            background-color: #d40000;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px 15px 10px 15px;
+            margin: 0 0 15px 0;
+        }
+    </style>
+</head>
+
+<body id="top" data-spy="scroll">
+
+
+<!-- Copyright � 2008. Spidersoft Ltd -->
+<style>
+    A.applink:hover {
+        border: 2px dotted #DCE6F4;
+        padding: 2px;
+        background-color: #ffff00;
+        color: green;
+        text-decoration: none
+    }
+
+    A.applink {
+        border: 2px dotted #DCE6F4;
+        padding: 2px;
+        color: #2F5BFF;
+        background: transparent;
+        text-decoration: none
+    }
+
+    A.info {
+        color: #2F5BFF;
+        background: transparent;
+        text-decoration: none
+    }
+
+    A.info:hover {
+        color: green;
+        background: transparent;
+        text-decoration: underline
+    }
+</style>
+
+
+<header id="home">
+    <!--main-nav-->
+    <div id="main-nav">
+
+        <nav class="navbar">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <a href="index.html" class="navbar-brand">PepBCL</a>
+                </div>
+                <div class="navbar-collapse collapse" id="ftheme">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="fa fa-home" href="home.html">Home</a></li>
+                        <li><a href="Server.html">Server</a></li>
+                        <li><a href="Download.html">Download</a></li>
+                        <li><a class="fa fa-users" href="Contact.html">Contact</a></li>
+                        <li><a href="Query.html">Query</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">PepBCL</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="fa fa-home" href="home.html">Home</a></li>
+                    <li><a href="Server.html">Server</a></li>
+                    <li><a href="Download.html">Download</a></li>
+                    <li><a class="fa fa-users" href="Contact.html">Contact</a></li>
+                    <li><a href="Query.html">Query</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+</header>
+
+<div class="container">
+    <h2>Identification of protein-peptide binding residues</h2>
+
+    <div class="alert alert-warning" role="alert">
+        <strong>Please cite!</strong>
+        If you use PepBCL for research, please cite the following paper: <a href="">PepBCL: A novel BERT-based contrastive learning framework using sequences only to predict protein-peptide binding residues</a>
+        If you have any comments, corrections or questions please <a href="Contact.html">contact us</a>.
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <form class="frm-submit" role="form" method="post" action="/PepBCL/ProcessServlet"
+                  enctype="multipart/form-data" id="form">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+
+                        <h3 class="panel-title">Step.1: Input sequences in fasta format</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- <form class="frm-submit" role="form" method="post" action="ProcessServlet" enctype="multipart/form-data"> -->
+                        <div id="table1" style="display: none;"><font size="5" color="blue">Your job is being processed
+                            ...</font></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="data" style="float: left"><strong style="width:100%;color:blue">Paste your
+                                    sequences with Fasta format below(click
+                                    <u id="examplehere" style="color:red">here</u> for example)</strong></label>
+
+                                <textarea class="form-control" name="data" id="data" rows="10"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="file">Upload a File</label>
+                                <input type="file" id="file" name="file"/>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+
+                        <h3 class="panel-title">Step.2: Input sequences in fasta format</h3>
+                    </div>
+                    <div class="panel-body">
+                        <button type="submit" class="btn btn-primary" style="width: 48%;"
+                                onClick="toggle('table1')">Submit
+                        </button>&nbsp;&nbsp;
+                    </div>
+                </div>
+            </form>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sample fasta Sequence(s)</h3>
+                </div>
+                <pre id="samples">
+>example
+SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADLCHYHSQESDGLVCLLKKPFNRPQGVQPKTGPFEDLKENLIREYVKQTWNLQGQALEQAIISQKPQLEKLIATTAHEKMPWFHGKISREESEQIVLIGSKTNGKFLIRARDNNGSYALCLLHEGKVLHYRIDKDKTGKLSIPEGKKFDTLWQLVEHYSYKADGLLRVLTVPCQKI
+</pre>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Instructions</h3>
+                </div>
+                <div class="panel-body">
+                    <p>To use the classifier to predict protein-peptide binding residues from sequence, either:</p>
+                    <ul>
+                        <li>paste your FASTA-formatted protein sequences into the text area, or</li>
+                        <li>upload a FASTA-formatted file with your protein sequences.</li>
+                    </ul>
+                    <p>Fasta must be the same format like sample</p>
+                    <p>Press the "Submit" button to upload the sequences and begin the classification.</p>
+                    <!-- Provided an e-mail address you will receive an e-mail when your job finishes or fails including a link to the results. You will also be able to download the results as a CSV file. -->
+                    <p>Waiting a moment and your results will be presented in web page.
+                    </p>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Dependencies</h3>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" style="text-align: center;">
+                        Java 1.8.0
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        IntelliJ IDEA
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        Python 3.9
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        pytorch
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        transformers
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        scikit-learn
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        numpy
+                    </li>
+                    <li class="list-group-item" style="text-align: center;">
+                        matplotlib
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Scripts -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/script.js"></script>
+<script src="js/jquery.tabletoCSV.js"></script>
+<script type="text/javascript">
+
+
+    $('#examplehere')
+        .click(
+            function () {
+
+                $('#data')
+                    .val(
+                        "\>1a81A \r\n\
+SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADLCHYHSQESDGLVCLLKKPFNRPQGVQPKTGPFEDLKENLIREYVKQTWNLQGQALEQAIISQKPQLEKLIATTAHEKMPWFHGKISREESEQIVLIGSKTNGKFLIRARDNNGSYALCLLHEGKVLHYRIDKDKTGKLSIPEGKKFDTLWQLVEHYSYKADGLLRVLTVPCQKI");
+
+            });
+
+
+    //	$('#btn_reset').click(function() {
+    //		$('#data').val('');
+    //		var file = document.getElementById("file");
+    //		if (file.outerHTML) {
+    //			file.outerHTML = file.outerHTML;
+    //			} else { // FF(包括3.5)
+    //			file.value = "";
+    //			}
+    //		var Pep = document.getElementById("Pep");
+    //		if (Pep!="C.elegans") {Pep.value = "C.elegans";}
+    //		var confi = document.getElementById("confi");
+    //		if (confi!=0.5) {confi.value = 0.5;}
+    //
+    //	});
+
+    $('.frm-submit').submit(function (event) {
+        if ($('.frm-submit #data').val() == '' && $('.frm-submit #file').val() == '') {
+            alert('Please paste or upload the Protein sequences in FASTA format');
+            $('.frm-submit #data').focus();
+            event.preventDefault();
+        }
+        if ($('.frm-submit #data').val() != '' && $('.frm-submit #file').val() != '') {
+            alert('Choose one of the paste or upload files');
+            $('.frm-submit #data').focus();
+            event.preventDefault();
+        }
+    });
+</script>
+<!--<script >-->
+<!--function Dataset1samples(){-->
+<!--var pre=document.getElementById("samples");-->
+<!--pre.innerHTML="&gt;AA_1|1<br>GAAAACGGACAAGCCAAACCCCCGAGAGCTCAGTGGCGAGA"+-->
+<!--"<br>&gt;AA_2|0<br>ATTACCCTTGAACAAGTAGTCGTATTCATCGTCACGAGAGA";-->
+<!--}-->
+
+<!--function Dataset2samples(){-->
+<!--var pre=document.getElementById("samples");-->
+<!--pre.innerHTML="&gt;AB_1|1<br>TGCGGGCAGCCTCTAGTTACCGCTACCTCCACAGTACCGGA"+-->
+<!--"<br>&gt;AB_2|0<br>GACTTACTCAAGGGAGTAGCCAATCTGTCGGATACGCCCGT";-->
+<!--}-->
+<!--function Dataset3samples(){-->
+<!--var pre=document.getElementById("samples");-->
+<!--pre.innerHTML="&gt;AC_1|1<br>GAAGAAGTAGGCCATTATCTCGAATGAGCCAAACTAGTATT"+-->
+<!--"<br>&gt;AC_2|0<br>CCTAAACCCTAAACCCTAAACCCTAAACCTCTGAATCCTTC";-->
+<!--}-->
+<!--function Dataset4samples(){-->
+<!--var pre=document.getElementById("samples");-->
+<!--pre.innerHTML="&gt;AI_1|1<br>GTTGAAGCTAAATTCACCGGCGTTGATCGTAAAAACCGCGC"+-->
+<!--"<br>&gt;AI_2|0<br>GCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTA";-->
+<!--}-->
+<!--function Dataset5samples(){-->
+<!--var pre=document.getElementById("samples");-->
+<!--pre.innerHTML="&gt;AV_1|1<br>AGCTCGATAACCACCCCTGGCCGCCAAGGCTCTTTAGGGGG"+-->
+<!--"<br>&gt;AV_2|0<br>ACCTGGTAGGCAGATGTGGACTGCTCTTCTACCTCAAAAAA";-->
+<!--}-->
+<!--function Dataset6samples(){-->
+<!--var pre=document.getElementById("samples");-->
+<!--pre.innerHTML="&gt;CP_1|1<br>GGAATCGAGGCCAGTGATGGCAGTCGAAGTGATTTTCCCGA"+-->
+<!--"<br>&gt;CP_2|0<br>TACCGGTTTCCCGAGAAGGTCTGTCATGGAAGAAGTGTGGC";-->
+<!--}   -->
+
+<!--//$("#Pep").change(function(){-->
+<!--//	var opt=$("#Pep").val();-->
+<!--//-->
+<!--//	var species_mark=opt-->
+<!--//-->
+<!--//-->
+<!--//	if(species_mark =="C.elegans"){-->
+<!--//		Dataset1samples();-->
+<!--//	}-->
+<!--//	else if(species_mark =="D.melanogaster"){-->
+<!--//		Dataset2samples();-->
+<!--//	}-->
+<!--//	else if(species_mark =="A.thaliana"){-->
+<!--//		Dataset3samples();-->
+<!--//	}-->
+<!--//	else if(species_mark =="E.coli"){-->
+<!--//		Dataset4samples();-->
+<!--//	}-->
+<!--//	else if(species_mark =="G.subterraneus"){-->
+<!--//		Dataset5samples();-->
+<!--//	}-->
+<!--//	else if(species_mark =="G.pickeringii"){-->
+<!--//		Dataset6samples();-->
+<!--//	}-->
+<!--//-->
+<!--//});-->
+
+
+<!--</script>-->
+<script>
+
+
+    /* this function is used for generating length information radios */
+    function getvalue(value) {
+
+        decide_datasets();
+    }
+
+    function toggle(id) {
+        var tb = document.getElementById(id);
+        if (tb.style.display == 'none') tb.style.display = 'block';
+        else tb.style.display = 'none';
+    }
+
+    function toggle1(id) {
+        var tb = document.getElementById(id);
+        if (tb.style.display == 'block') tb.style.display = 'none';
+        else tb.style.display = 'none';
+    }
+
+</script>
+<div class="container">
+    <footer class="footer">
+        <br>
+        <hr>
+        <p>
+            <a href="http://www.sdu.edu.cn/">Shandong University</a> &copy; 2021
+            <span class="pull-right"> If you have any comments, corrections or questions <a href="Contact.html"
+                                                                                            target="_top">contact us</a></span>
+        </p>
+    </footer>
+</div>
+</body>
+
+</html>
