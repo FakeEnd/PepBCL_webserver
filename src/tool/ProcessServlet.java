@@ -2,9 +2,7 @@ package tool;
 
 import java.io.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 import javax.servlet.RequestDispatcher;
@@ -70,6 +68,7 @@ public class ProcessServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String model_type_choice = "High_model";
         String realpath = this.getServletContext().getRealPath("/");
 
         String data = "";
@@ -127,11 +126,18 @@ public class ProcessServlet extends HttpServlet {
                 System.out.println(item);
                 //如果fileitem中封装的是普通输入项的数据
                 if (item.isFormField()) {
+                    System.out.println("111111111111111111111111");
                     String name = item.getFieldName();
-//                    System.out.print(name);
-                    //解决普通输入项的数据的中文乱码问题
+                    System.out.println(name);
+                    //解决普通输入项的数据的中文
+                    //乱码问题
                     String value = item.getString("UTF-8");
-                    //value = new String(value.getBytes("iso8859-1"),"UTF-8");
+
+                    if (name.equals("model_type_choice")){
+                        model_type_choice = new String(value.getBytes("iso8859-1"),"UTF-8");
+
+                    }
+
                     if (name.trim().equals("data")) {
                         data = value;
                     }
@@ -224,7 +230,13 @@ public class ProcessServlet extends HttpServlet {
         }
         //input_path = "C:\\Users\\chenhuangrong\\Desktop\\files";
         try {
-            predict(input_path, input_filename, realpath);
+            String download_result_full = input_path + System.getProperty("file.separator");
+            // /usr/local/tomcat/webapps/PepBCL/WEB-INF/upload/8/3/results.text
+            String[] download_result_last = download_result_full.split("upload"); // /8/3/results.text'
+            String[] download_result_pre = download_result_full.split("WEB-INF"); // /usr/local/tomcat/webapps/PepBCL/
+            // '/usr/local/tomcat/webapps/PepBCL/fasta_results/8/3/results.text'
+
+            predict(input_path, input_filename, realpath, model_type_choice, download_result_pre[0] + "fasta_results" + download_result_last[1]);
             System.out.println("test");
             System.out.println(input_path);
             System.out.println(input_filename);
@@ -252,6 +264,9 @@ public class ProcessServlet extends HttpServlet {
 //            System.out.print(input_path + System.getProperty("file.separator") + "/Result.txt");
             System.out.print(prelist);
             request.setAttribute("prelist", prelist);
+
+
+            request.setAttribute("download_result", "fasta_results" + download_result_last[1] + "result.text");
             RequestDispatcher rd = request.getRequestDispatcher("/result.jsp");
             rd.forward(request, response);
             prelist.clear();
@@ -265,7 +280,7 @@ public class ProcessServlet extends HttpServlet {
 
     }
 
-    public void predict(String input_path, String input_filename, String realpath) throws IOException, InterruptedException {
+    public void predict(String input_path, String input_filename, String realpath, String model_type_choice, String download_result) throws IOException, InterruptedException {
         String file_path = input_path + System.getProperty("file.separator") + input_filename;
         String tsv_path = input_path + System.getProperty("file.separator") + "input.tsv";
         ArrayList<String> list_name = new ArrayList();
@@ -305,17 +320,31 @@ public class ProcessServlet extends HttpServlet {
             System.out.println("list_index:" + list_index);
 
             int i;
-            for (i = 0; i < list_name.size(); ++i) {
-                list_sample.add((String) list_sequence.get(i));
+            for(i = 0; i < list_name.size(); ++i) {
+                list_sample.add(i + "\t" + (String)list_name.get(i) + "\t" + (String)list_sequence.get(i));
             }
 
             System.out.println("list_sample:" + list_sample);
-            wr.write("sequence\n".getBytes());
+            wr.write("index\tname\tsequence\n".getBytes());
 
-            for (i = 0; i < list_sample.size(); ++i) {
-                wr.write(((String) list_sample.get(i)).getBytes());
+            for(i = 0; i < list_sample.size(); ++i) {
+                wr.write(((String)list_sample.get(i)).getBytes());
                 wr.write("\r\n".getBytes());
             }
+
+//            int i;
+//            for (i = 0; i < list_name.size(); ++i) {
+//                list_sample.add((String) list_sequence.get(i));
+////                list_sample.add((String) list_sequence.get(i));
+//            }
+//
+//            System.out.println("list_sample:" + list_sample);
+//            wr.write("sequence\n".getBytes());
+//
+//            for (i = 0; i < list_sample.size(); ++i) {
+//                wr.write(((String) list_sample.get(i)).getBytes());
+//                wr.write("\r\n".getBytes());
+//            }
 
             br1.close();
             br2.close();
@@ -335,8 +364,9 @@ public class ProcessServlet extends HttpServlet {
         System.out.println("input_path:" + input_path);
         System.out.println("tsv_path:" + tsv_path);
         System.out.println("realpath:" + realpath);
+        System.out.println("download_result:" + download_result);
 
-        String[] args = new String[]{python_path, model_path, tsv_path, result_path};
+        String[] args = new String[]{python_path, model_path, tsv_path, result_path, model_type_choice, download_result};
 //        String[] args = new String[]{python_path, model_path, "-input_path",tsv_path, "-output_path",result_path};
         System.out.println(args);
         Process proc = Runtime.getRuntime().exec(args);

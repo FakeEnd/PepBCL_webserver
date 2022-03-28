@@ -84,7 +84,10 @@ class MyDataSet(Data.Dataset):
 
 def load_data(predict_path):
     path_data_test = predict_path
-    sequences_test = util_file.load_tsv_format_data(path_data_test)
+    # sequences_test = util_file.load_tsv_format_data(path_data_test)
     # data_test = make_data_with_unified_length(sequences_test, config)
 
-    return sequences_test
+    # python 读取csv文件
+    names_test, sequences_test = util_file.load_tsv_multi_data(path_data_test)
+
+    return names_test, sequences_test

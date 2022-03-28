@@ -61,43 +61,63 @@
 									<div class="col-lg-11">
 										<%
 					List<String> showlist1 = (List<String>) request.getAttribute("prelist");
+//											String path = "data/Dataset2_train.tsv";
+					String path = (String) request.getAttribute("download_result");
 //										String Pep = (String) request.getAttribute("Pep");
 				%>
 
 
 										<strong><h3 align="center">Results</h3></strong>
+										<%
+											for (int i = 0; i < showlist1.size(); i++) {
+												String[] show = showlist1.get(i).split(",");
+										%>
 
-										<table class="table table-hover"   style="width:100%"
-   >
-											<tr class="info">
-												<td align="center">No.</td>
-												<td align="center">Residue</td>
-												<td align="center">Binary</td>
-												<td align="center">Propensity score</td>
-											</tr>
+										<h4>><%=show[1]%></h4>
 
-												<%
-						for (int i = 0; i < showlist1.size(); i++) {
-								String[] show = showlist1.get(i).split(",");
-					%>
-											<tr class="info">
-												<td align="center"><%=show[0]%></td>
-												<td align="center"><%=show[1]%></td>
-												<td align="center"><%=show[2]%></td>
-												<td align="center"><%=show[3]%></td>
-											</tr>
-											<%
-						}
-					%>
-										</table>
+
+										<pre>><%=show[1]%>
+<%=show[2]%>
+<%=show[3]%></pre>
+
+										<%
+											}
+										%>
+<%--										<table class="table table-hover"   style="width:100%"--%>
+<%--   >--%>
+<%--											<tr class="info">--%>
+<%--												<td align="center">No.</td>--%>
+<%--												<td align="center">Residue</td>--%>
+<%--												<td align="center">Binary</td>--%>
+<%--												<td align="center">Propensity score</td>--%>
+<%--											</tr>--%>
+
+<%--												<%--%>
+<%--						for (int i = 0; i < showlist1.size(); i++) {--%>
+<%--								String[] show = showlist1.get(i).split(",");--%>
+<%--					%>--%>
+<%--											<tr class="info">--%>
+<%--												<td align="center"><%=show[0]%></td>--%>
+<%--												<td align="center"><%=show[1]%></td>--%>
+<%--												<td align="center"><%=show[2]%></td>--%>
+<%--												<td align="center"><%=show[3]%></td>--%>
+<%--											</tr>--%>
+<%--											<%--%>
+<%--						}--%>
+<%--					%>--%>
+<%--										</table>--%>
 
 
 										<br />
-                                   <a href="http://120.24.47.30:8080/PepBCL">
+										<a href="http://120.24.47.30:8080/PepBCL">
 										<button id="btn_back" type="button"
 											class="btn btn-warning btn-center" style="width: 200px;">Back
-										</button></a>
-
+										</button>
+										</a>
+										<a href=<%=path%> >
+											<button id="btn_back" type="button"
+													class="btn btn-info btn-center" style="width: 200px;">Download result
+											</button></a>
 									</div>
 									</div>
 								</div>

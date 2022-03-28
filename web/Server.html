@@ -17,6 +17,7 @@
     <script>
         window.Laravel = {"csrfToken": "ASokYLsRc7WFiTuJQPwKga3FPj7onwZo2cORMMLU"};
     </script>
+
     <style>
         pre > b {
             color: #337ab7;
@@ -157,12 +158,31 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">
 
-                        <h3 class="panel-title">Step.2: Input sequences in fasta format</h3>
+                        <h3 class="panel-title">Step.2: Choose model type</h3>
+                    </div>
+                    <div class="panel-body">
+                        <button type="button" id = "High_model" class="btn btn-primary" style="width: 21%;"
+                                onClick="getvalue('High_model')">High
+                        </button>
+                        <button type="button" id = "Medium_model" class="btn btn-default" style="width: 21%;"
+                                onClick="getvalue('Medium_model')">Medium
+                        </button>
+                        <button type="button" id = "Low_model" class="btn btn-default" style="width: 21%;"
+                                onClick="getvalue('Low_model')">Low
+                        </button>
+                        <input style="display: none;" type="text" id="model_type" value="Low_model" name="model_type_choice"/>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+
+                        <h3 class="panel-title">Step.3: Submit Task</h3>
                     </div>
                     <div class="panel-body">
                         <button type="submit" class="btn btn-primary" style="width: 48%;"
                                 onClick="toggle('table1')">Submit
-                        </button>&nbsp;&nbsp;
+                        </button>
                     </div>
                 </div>
             </form>
@@ -277,6 +297,19 @@ SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADL
             event.preventDefault();
         }
     });
+
+    var name = "High_model"
+    function getvalue(id) {
+        // alert(id)
+        var buttonbefore = document.getElementById(name);
+        buttonbefore.className = 'btn btn-default'
+        var buttonlast = document.getElementById(id);
+        buttonlast.className = 'btn btn-primary'
+
+        var input = document.getElementById('model_type');
+        input.value = id
+        name = id
+    }
 </script>
 <!--<script >-->
 <!--function Dataset1samples(){-->
@@ -344,10 +377,7 @@ SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADL
 
 
     /* this function is used for generating length information radios */
-    function getvalue(value) {
 
-        decide_datasets();
-    }
 
     function toggle(id) {
         var tb = document.getElementById(id);
@@ -356,6 +386,12 @@ SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADL
     }
 
     function toggle1(id) {
+        var tb = document.getElementById(id);
+        if (tb.style.display == 'block') tb.style.display = 'none';
+        else tb.style.display = 'none';
+    }
+
+    function toggle2(id) {
         var tb = document.getElementById(id);
         if (tb.style.display == 'block') tb.style.display = 'none';
         else tb.style.display = 'none';

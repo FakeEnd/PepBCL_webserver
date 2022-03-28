@@ -67,9 +67,9 @@ class ContrastiveLoss(torch.nn.Module):
         return loss_contrastive
 
 def load_data(predict_path):
-    test_iter = data_loader_protBert.load_data(predict_path)
+    names, test_iter = data_loader_protBert.load_data(predict_path)
     print('-' * 20, 'data construction over', '-' * 20)
-    return test_iter
+    return names, test_iter
 
 def draw_figure_CV(config, fig_name):
     sns.set(style="darkgrid")
@@ -408,14 +408,17 @@ def train_ACP(train_iter, valid_iter, test_iter, model, optimizer, criterion, co
     return best_performance
 
 
-def model_eval(data_iter, model):
+def model_eval(data_iter, model, mode = "High_model"):
     device = torch.device("cpu")
-    label_pred = torch.empty([0], device=device)
+    # label_pred = torch.empty([0], device=device)
     pred_prob = torch.empty([0], device=device)
+
+    label_preds = []
 
     print('model_eval data_iter', len(data_iter))
 
     model.eval()
+    count_seq = 1
     with torch.no_grad():
         for batch in data_iter:
             input = batch
@@ -428,16 +431,35 @@ def model_eval(data_iter, model):
             pred_prob_positive = pred_prob_all[:, :, 1]
             positive = torch.empty([0], device=device)
             pred_prob_sort = torch.max(pred_prob_all, 2)
-            pred_class = pred_prob_sort[1]
-            p_class = torch.empty([0], device=device)
-            positive = torch.cat([positive, pred_prob_positive[0][:]])
-            p_class = torch.cat([p_class, pred_class[0][:]])
+            # pred_class = pred_prob_sort[1]
 
-            label_pred = torch.cat([label_pred, p_class.float()])
-            pred_prob = torch.cat([pred_prob, positive])
-            break
+            if mode == 'Low_model':
+                pred_class = [1 if i >= 0.48510798811912537 else 0 for i in pred_prob_positive[0]]
+            elif mode == 'Medium_model':
+                pred_class = [1 if i >= 0.48432812094688416 else 0 for i in pred_prob_positive[0]] #recall 0.700
+            elif mode == 'High_model':
+                pred_class = [1 if i >= 0.49500772356987 else 0 for i in pred_prob_positive[0]] #recall 0.350
 
-    return input, label_pred, pred_prob
+            # p_class = torch.empty([0], device=device)
+            # positive = torch.cat([positive, pred_prob_positive[:]])
+            # p_class = torch.cat([p_class, pred_class[:]])
+
+            # label_pred = torch.cat([label_pred, p_class.float()])
+            # pred_prob = torch.cat([pred_prob, positive])
+            # break
+
+            join_str = ''
+            seq = []
+            for i in range(len(pred_class)):
+                seq.append(str(pred_class[i]))
+
+            label_preds.append(join_str.join(seq))
+
+            count_seq = count_seq + 1
+            if count_seq > 10:
+                break
+
+    return label_preds
 
 
 def k_fold_CV(train_iter_orgin, test_iter, config):
@@ -651,24 +673,55 @@ if __name__ == '__main__':
     # config = load_config()
 
     '''load data'''
-    test_iter = load_data(sys.argv[1])
+    names, test_iter = load_data(sys.argv[1])
+    # cutoff_mode = sys.argv[3]
+    cutoff_mode = sys.argv[3]
+
     print('=' * 20, 'load data over', '=' * 20)
 
     # predict
     model = prot_bert.BERT()
     model_dict = torch.load('/usr/local/tomcat/webapps/PepBCL/program/prot_bert/train/state_dict.pl',map_location=torch.device('cpu'))['model']
     model.load_state_dict(model_dict)
-    input, label_pred, pred_prob = model_eval(test_iter, model)
-    sequence = [s for s in input]
-    no = [i+1 for i in range(len(sequence))]
-    label_pred = [t.numpy().astype(int) for t in label_pred]
-    pred_prob = [t.numpy() for t in pred_prob]
+
+    label_pred = model_eval(test_iter, model, cutoff_mode)
+    # sequences ['AGSX', 'XBGT', ...]
+    # names ['183', '174', ...]
+
+    no = [i+1 for i in range(len(test_iter))]
+    # label_pred = [t.numpy().astype(int) for t in label_pred]
+
     # 生成tsv文件
     output_path = sys.argv[2] + "result.tsv"
-    file_columns = ['No.', 'Residue', 'Binary', 'Propensity score']
-    data = zip(no, sequence, label_pred, pred_prob)
+    fasta_output = sys.argv[4] + "result.text"
+
+    file_columns = ['No.', 'name', 'Residue', 'Binary']
+    data = zip(no, names, test_iter, label_pred)
     with open(output_path, "w", newline="") as wf:
         writer = csv.writer(wf, delimiter='\t')
         writer.writerow(file_columns)
         writer.writerows(data)
+
+    if not os.path.exists(sys.argv[4]):
+        os.makedirs(sys.argv[4])
+
+    with open(fasta_output, "w", newline="") as wf:
+        for i in range(len(test_iter)):
+            wf.write('>'+names[i]+'\r\n')
+            wf.write(test_iter[i]+'\r\n')
+            wf.write(label_pred[i]+'\r\n')
+
+    # input, label_pred, pred_prob = model_eval(test_iter, model)
+    # sequence = [s for s in input]
+    # no = [i+1 for i in range(len(sequence))]
+    # label_pred = [t.numpy().astype(int) for t in label_pred]
+    # pred_prob = [t.numpy() for t in pred_prob]
+    # # 生成tsv文件
+    # output_path = sys.argv[2] + "result.tsv"
+    # file_columns = ['No.', 'Residue', 'Binary', 'Propensity score']
+    # data = zip(no, sequence, label_pred, pred_prob)
+    # with open(output_path, "w", newline="") as wf:
+    #     writer = csv.writer(wf, delimiter='\t')
+    #     writer.writerow(file_columns)
+    #     writer.writerows(data)
 
