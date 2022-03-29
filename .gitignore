@@ -5,4 +5,4 @@
 
 /web/program/prot_bert_bfd
 /web/program/prot_bert/train/state_dict.pl
-/web/program/prot_bert/__pycache__
+/web/program/prot_bert/configuration/__pycache__
