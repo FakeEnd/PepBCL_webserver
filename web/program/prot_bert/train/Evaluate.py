@@ -408,7 +408,8 @@ def train_ACP(train_iter, valid_iter, test_iter, model, optimizer, criterion, co
     return best_performance
 
 
-def model_eval(data_iter, model, mode = "High_model"):
+# def model_eval(data_iter, model, mode = "High_model"):
+def model_eval(data_iter, model, model_threshold_setting = 0.5):
     device = torch.device("cpu")
     # label_pred = torch.empty([0], device=device)
     pred_prob = torch.empty([0], device=device)
@@ -433,12 +434,13 @@ def model_eval(data_iter, model, mode = "High_model"):
             pred_prob_sort = torch.max(pred_prob_all, 2)
             # pred_class = pred_prob_sort[1]
 
-            if mode == 'Low_model':
-                pred_class = [1 if i >= 0.48510798811912537 else 0 for i in pred_prob_positive[0]]
-            elif mode == 'Medium_model':
-                pred_class = [1 if i >= 0.48432812094688416 else 0 for i in pred_prob_positive[0]] #recall 0.700
-            elif mode == 'High_model':
-                pred_class = [1 if i >= 0.49500772356987 else 0 for i in pred_prob_positive[0]] #recall 0.350
+            # if mode == 'Low_model':
+            #     pred_class = [1 if i >= 0.48510798811912537 else 0 for i in pred_prob_positive[0]]
+            # elif mode == 'Medium_model':
+            #     pred_class = [1 if i >= 0.48432812094688416 else 0 for i in pred_prob_positive[0]] #recall 0.700
+            # elif mode == 'High_model':
+            #     pred_class = [1 if i >= 0.49500772356987 else 0 for i in pred_prob_positive[0]] #recall 0.350
+            pred_class = [1 if i >= model_threshold_setting else 0 for i in pred_prob_positive[0]] #recall 0.350
 
             # p_class = torch.empty([0], device=device)
             # positive = torch.cat([positive, pred_prob_positive[:]])
@@ -675,7 +677,7 @@ if __name__ == '__main__':
     '''load data'''
     names, test_iter = load_data(sys.argv[1])
     # cutoff_mode = sys.argv[3]
-    cutoff_mode = sys.argv[3]
+    cutoff_mode = float(sys.argv[3])
 
     print('=' * 20, 'load data over', '=' * 20)
 

@@ -158,19 +158,26 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">
 
-                        <h3 class="panel-title">Step.2: Choose model type</h3>
+                        <h3 class="panel-title">Step.2: Threshold setting</h3>
                     </div>
                     <div class="panel-body">
-                        <button type="button" id = "High_model" class="btn btn-primary" style="width: 21%;"
-                                onClick="getvalue('High_model')">High
-                        </button>
-                        <button type="button" id = "Medium_model" class="btn btn-default" style="width: 21%;"
-                                onClick="getvalue('Medium_model')">Medium
-                        </button>
-                        <button type="button" id = "Low_model" class="btn btn-default" style="width: 21%;"
-                                onClick="getvalue('Low_model')">Low
-                        </button>
-                        <input style="display: none;" type="text" id="model_type" value="Low_model" name="model_type_choice"/>
+<!--                        <label for="customRange1" class="form-label">Example range</label>-->
+<!--                        <button type="button" id = "Range_label" class="btn btn-default" style="width: 10%; float: left; margin: 0px 20px 0px 0px">-->
+<!--                            0.5-->
+<!--                        </button>-->
+                        <input type="text" class="form-control" id="Range_label" placeholder="0.5" style="width: 12%; margin: 0px 20px 0px 0px; float: left;" onchange="inputrange()" >
+                        <input type="range" class="form-range" id="Range_input" style="width: 61%; margin: 6px 0px" value="0.5" min="0" max="1" step="0.001" name="model_threshold_setting" onchange="changerange()">
+
+<!--                        <button type="button" id = "High_model" class="btn btn-primary" style="width: 21%;"-->
+<!--                                onClick="getvalue('High_model')">High-->
+<!--                        </button>-->
+<!--                        <button type="button" id = "Medium_model" class="btn btn-default" style="width: 21%;"-->
+<!--                                onClick="getvalue('Medium_model')">Medium-->
+<!--                        </button>-->
+<!--                        <button type="button" id = "Low_model" class="btn btn-default" style="width: 21%;"-->
+<!--                                onClick="getvalue('Low_model')">Low-->
+<!--                        </button>-->
+<!--                        <input style="display: none;" type="text" id="model_type" value="Low_model" name="model_type_choice"/>-->
                     </div>
                 </div>
 
@@ -203,16 +210,37 @@ SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADL
                     <h3 class="panel-title">Instructions</h3>
                 </div>
                 <div class="panel-body">
-                    <p>To use the classifier to predict protein-peptide binding residues from sequence, either:</p>
-                    <ul>
-                        <li>paste your FASTA-formatted protein sequences into the text area, or</li>
-                        <li>upload a FASTA-formatted file with your protein sequences.</li>
-                    </ul>
-                    <p>Fasta must be the same format like sample</p>
-                    <p>Press the "Submit" button to upload the sequences and begin the classification.</p>
-                    <!-- Provided an e-mail address you will receive an e-mail when your job finishes or fails including a link to the results. You will also be able to download the results as a CSV file. -->
-                    <p>Waiting a moment and your results will be presented in web page.
-                    </p>
+
+                    <ol style="padding: 0px 0px 0px 20px;">
+                        <li>
+                            <p>
+                                To use the classifier to predict protein-peptide binding residues from sequence, either (1) paste your FASTA-formatted protein sequences into the text area, or (2) upload a FASTA-formatted file with your protein sequences.
+                            </p>
+                            <p>
+                                <strong>i. </strong>Fasta must be the same format like sample.
+                            </p>
+                            <p>
+                                <strong>ii. </strong>We set a maximum number as 10 of sequences per submission for better displaying and avoiding the heavy load on the server.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Threshold setting: If users want to predict more true protein-peptide binding sites, they can lower the threshold. Otherwise, they can increase the threshold.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Press the "Submit" button to upload the sequences and begin the classification.
+                            </p>
+                        </li>
+                        <!-- Provided an e-mail address you will receive an e-mail when your job finishes or fails including a link to the results. You will also be able to download the results as a CSV file. -->
+                        <li>
+                            <p>
+                                Waiting a moment and your results will be presented in web page.
+                            </p>
+                        </li>
+                    </ol>
+
                 </div>
             </div>
             <div class="panel panel-info">
@@ -309,6 +337,37 @@ SANHLPFFFGNITREEAEDYLVQGGMSDGLYLLRQSRNYLGGFALSVAHGRKAHHYTIERELNGTYAIAGGRTHASPADL
         var input = document.getElementById('model_type');
         input.value = id
         name = id
+    }
+
+    var threshold = 0.5
+    function changerange(){
+        threshold = document.getElementById("Range_input").value;
+        document.getElementById("Range_label").value = threshold;
+        console.log(threshold);
+    }
+
+    function inputrange(){
+        threshold_temp = document.getElementById("Range_label").value;
+        if (threshold_temp >1 || threshold_temp <0){
+            document.getElementById("Range_label").value = threshold;
+            return alert('The threshold is over the normality')
+        }
+        if(!isNumber(threshold_temp)) {
+            document.getElementById("Range_label").value = threshold;
+            return alert('The value is not valid');
+        }
+        threshold = threshold_temp
+        document.getElementById("Range_input").value = threshold;
+        console.log(threshold);
+    }
+    function isNumber(value) {         //验证是否为数字
+        var patrn = /^(-)?\d+(\.\d+)?$/;
+
+        if (patrn.exec(value) == null || value == "") {
+            return false
+        } else {
+            return true
+        }
     }
 </script>
 <!--<script >-->
