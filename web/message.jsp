@@ -36,7 +36,7 @@
     <p align="center" ><h2  align="center" ><b  id="layer" style="color: red;font-size: 50px">5 </b> seconds later this webpage will be redirected to home webpage</h2></p>
 <%
 		//转向语句
-		response.setHeader("Refresh", "5; URL=http://weilab.sducat.top/PepBCL/");
+		response.setHeader("Refresh", "5; URL=https://server.wei-group.net/PepBCL/");
 	%>
 
 

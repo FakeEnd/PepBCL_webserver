@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 
+import javax.lang.model.util.ElementScanner6;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -68,7 +69,8 @@ public class ProcessServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String model_type_choice = "High_model";
+//        String model_type_choice = "High_model";
+        String model_type_value = "0.5";
         String realpath = this.getServletContext().getRealPath("/");
 
         String data = "";
@@ -133,8 +135,13 @@ public class ProcessServlet extends HttpServlet {
                     //ÂÒÂëÎÊÌâ
                     String value = item.getString("UTF-8");
 
-                    if (name.equals("model_type_choice")){
-                        model_type_choice = new String(value.getBytes("iso8859-1"),"UTF-8");
+//                    if (name.equals("model_type_choice")){
+//                        model_type_choice = new String(value.getBytes("iso8859-1"),"UTF-8");
+//
+//                    }
+
+                    if (name.equals("model_threshold_setting")){
+                        model_type_value = new String(value.getBytes("iso8859-1"),"UTF-8");
 
                     }
 
@@ -236,7 +243,7 @@ public class ProcessServlet extends HttpServlet {
             String[] download_result_pre = download_result_full.split("WEB-INF"); // /usr/local/tomcat/webapps/PepBCL/
             // '/usr/local/tomcat/webapps/PepBCL/fasta_results/8/3/results.text'
 
-            predict(input_path, input_filename, realpath, model_type_choice, download_result_pre[0] + "fasta_results" + download_result_last[1]);
+            predict(input_path, input_filename, realpath, model_type_value, download_result_pre[0] + "fasta_results" + download_result_last[1]);
             System.out.println("test");
             System.out.println(input_path);
             System.out.println(input_filename);
@@ -291,33 +298,39 @@ public class ProcessServlet extends HttpServlet {
         try {
             RandomAccessFile br1 = new RandomAccessFile(new File(file_path), "r");
             RandomAccessFile br2 = new RandomAccessFile(new File(file_path), "r");
-            RandomAccessFile br3 = new RandomAccessFile(new File(file_path), "r");
+//            RandomAccessFile br3 = new RandomAccessFile(new File(file_path), "r");
             FileOutputStream wr = new FileOutputStream(new File(tsv_path));
             String str = null;
-
+            String sequence = "";
+            int index = 0;
             while ((str = br1.readLine()) != null) {
+
                 if (!str.equals("") && str.startsWith(">")) {
                     list_name.add(str.split(">")[1]);
+                    if(index != 0) {
+                        list_sequence.add(sequence);
+                        sequence = "";
+                    }
                 }
+                if (!str.equals("") && !str.startsWith(">")) {
+                    sequence = sequence + str;
+                }
+
+                index = index +1;
             }
+            list_sequence.add(sequence);
 
             System.out.println("list_name:" + list_name);
 
-            while ((str = br2.readLine()) != null) {
-                if (!str.equals("") && !str.startsWith(">")) {
-                    list_sequence.add(str);
-                }
-            }
-
             System.out.println("list_sequence:" + list_sequence);
 
-            while ((str = br3.readLine()) != null) {
-                if (!str.equals("") && str.startsWith(">")) {
-                    list_index.add(str);
-                }
-            }
+//            while ((str = br3.readLine()) != null) {
+//                if (!str.equals("") && str.startsWith(">")) {
+//                    list_index.add(str);
+//                }
+//            }
 
-            System.out.println("list_index:" + list_index);
+//            System.out.println("list_index:" + list_index);
 
             int i;
             for(i = 0; i < list_name.size(); ++i) {
@@ -348,7 +361,7 @@ public class ProcessServlet extends HttpServlet {
 
             br1.close();
             br2.close();
-            br3.close();
+//            br3.close();
             wr.close();
         } catch (FileNotFoundException var16) {
             var16.printStackTrace();
@@ -403,8 +416,8 @@ public class ProcessServlet extends HttpServlet {
             line = br.readLine();
             while ((line = br.readLine()) != null) {
 
-
-                result = line.split("\t")[0] + "," + line.split("\t")[1] + "," + line.split("\t")[2] + "," + line.split("\t")[3];
+                result = line.split("\t")[0] + "#####" + line.split("\t")[1] + "#####" + line.split("\t")[2] + "#####" + line.split("\t")[3];
+                System.out.println(result);;
                 prelist.add(result);
             }
 

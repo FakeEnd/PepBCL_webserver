@@ -70,7 +70,7 @@
 										<strong><h3 align="center">Results</h3></strong>
 										<%
 											for (int i = 0; i < showlist1.size(); i++) {
-												String[] show = showlist1.get(i).split(",");
+												String[] show = showlist1.get(i).split("#####");
 										%>
 
 										<h4>><%=show[1]%></h4>
@@ -164,6 +164,7 @@
 
 
 		})
+		console
 	</script>    
     
 </body>
